@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Kala from "../assets/images/cubone.webp";
+import ThemeSwitcher from "../utils/ThemeSwitcher";
+import { BurgerIcon } from "../assets/iconData";
 
 const Header = () => {
   const headerRef = useRef(null);
@@ -21,10 +23,10 @@ const Header = () => {
     });
   };
 
-  // useEffect(() => {
-  //   stickyHeaderFunc();
-  //   return window.removeEventListener("scroll", stickyHeaderFunc);
-  // }, []);
+  useEffect(() => {
+    stickyHeaderFunc();
+    return window.removeEventListener("scroll", stickyHeaderFunc);
+  }, []);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -32,25 +34,39 @@ const Header = () => {
     const targetAttr = e.target.getAttribute("href");
     const location = document.querySelector(targetAttr).offsetTop;
 
-    window.scrollTo({
-      top: location,
-      left: 0,
-    });
+    if (
+      document.body.scrollTop > 80 ||
+      document.documentElement.scrollTop > 80
+    ) {
+      window.scrollTo({
+        top: location - 100,
+        left: 0,
+      });
+    } else {
+      window.scrollTo({
+        top: location - 180,
+        left: 0,
+      });
+    }
   };
 
   return (
     <header
       ref={headerRef}
-      className="w-full h-fit flex items-center bg-gray-100 dark:bg-gray-900 "
+      className="w-full h-[80px] min-h-[80px] flex  bg-gray-200 dark:bg-gray-900 "
     >
       <div className="container">
-        <div className="flex flex-wrap items-center justify-between mx-auto p-4">
-          <span className="flex items-center">
+        <div className="flex flex-wrap justify-between mx-auto p-4 ">
+          <div className="flex items-center justify-center gap-x-2 ">
             <img src={Kala} className="h-8" alt="CuboneLogo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <span className=" text-2xl font-semibold whitespace-nowrap dark:text-white ">
               Jeff Personal Web
             </span>
-          </span>
+            <span className="flex justify-center items-center">
+              <ThemeSwitcher />
+            </span>
+          </div>
+
           {/* burger icon */}
           <button
             onClick={toggleMenu}
@@ -58,28 +74,17 @@ const Header = () => {
             className="sm:hidden inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-expanded={isOpen ? "true" : "false"}
           >
-            <span className="sr-only">Open main menu</span>
-            <svg
-              className="w-5 h-5"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 17 14"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 1h15M1 7h15M1 13h15"
-              />
-            </svg>
+            <BurgerIcon />
           </button>
           <div
-            className={`w-full sm:block sm:w-auto ${isOpen ? "absolute  top-0 w-[calc(100%-5rem)]" : "hidden"} `}
+            className={`w-full sm:block sm:w-auto ${
+              isOpen
+                ? "fixed z-[1000] rounded-lg w-[calc(100%)-10rem] left-0 p-10"
+                : "hidden"
+            } `}
             id="navbar-default"
           >
-            <ul className="font-medium flex flex-col p-4 sm:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0 sm:bg-white dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700">
+            <ul className="font-medium flex flex-col p-4 sm:p-0 mt-4 border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0  dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <a
                   onClick={handleClick}

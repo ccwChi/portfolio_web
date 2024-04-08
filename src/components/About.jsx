@@ -4,20 +4,27 @@ import Jeff from "../assets/images/694167.webp";
 const About = () => {
   const [pic, setPic] = useState(1);
   return (
-    <div data-aos="fade-up" id="about" className="container md:py-32 py-6 ">
+    // <div data-aos="fade-up" id="about" className="container md:py-32 py-6 ">
+    //   <div className="flex flex-col items-center pb-6 gap-2" id="about">
+    <div className="container sm:py-16 py-12 w-full flex flex-col gap-y-6">
+      <div className="flex flex-col items-center pb-6 gap-2" id="about">
+        <p className="text-3xl text-gray-900 dark:text-white text-center">
+          About Me
+        </p>
+      </div>
       <div className="flex sm:flex-row flex-col px-2">
         {/* 左邊框 */}
         <div className="sm:w-[300px] w-full flex flex-col justify-center items-center relative">
           <span
             className={`absolute h-3 w-3 bg-blue-800 rounded-full ring-2 ${
-              pic === 1 ? "border-emerald-400 border-2"  : ""
-            } bottom-14 left-[calc(50%+_30px)] cursor-pointer`}
+              pic === 1 ? "border-emerald-400 border-2" : ""
+            } top-0 left-[calc(50%+_30px)] cursor-pointer`}
             onClick={() => setPic(1)}
           ></span>
           <span
             className={`absolute h-3 w-3 bg-blue-800 rounded-full ring-2 ${
               pic === 2 ? "border-emerald-400 border-2" : ""
-            } bottom-14 left-[calc(50%+_50px)] cursor-pointer`}
+            } top-0 left-[calc(50%+_50px)] cursor-pointer`}
             onClick={() => setPic(2)}
           ></span>
           <img
@@ -30,9 +37,9 @@ const About = () => {
           </div>
         </div>
         {/* 右邊框 */}
-        <div className="p-2 flex-1 flex flex-col gap-2 justify-center items-center mt-6">
+        <div className="p-2 sm:p-0 flex-1 flex flex-col gap-2 items-center">
           <div className="flex flex-col pb-6 gap-2 text-center sm:text-start">
-            <p className="text-2xl text-gray-900 dark:text-white">
+            <p className="text-2xl text-gray-900 dark:text-white pt-0  md:pt-4 ">
               I am Chao Chi (Jeff)
             </p>
             <p className="text-base sm:text-lg text-gray-900 dark:text-white">
