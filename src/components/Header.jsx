@@ -66,10 +66,11 @@ const Header = () => {
 		localStorage.setItem("selectedLanguage", language);
 	}, [language]);
 
-	const handleChangeLanguage = (event) => {
-		const selectedLanguage = event.target.value;
-		changeLanguage(selectedLanguage);
-		localStorage.setItem("selectedLanguage", selectedLanguage);
+	const handleChangeLanguage = (lag) => {
+		// const selectedLanguage = event.target.value;
+    console.log(lag)
+		changeLanguage(lag);
+		localStorage.setItem("selectedLanguage", lag);
 	};
 
 
@@ -140,15 +141,27 @@ const Header = () => {
 						value={language}
 						onChange={handleChangeLanguage}
 						size="small"
-						className="!h-9 !text-white !w-[90px] sm:!w-[220px]"
+						className="!h-9 "
 						>
 						{languagesList.map((obj) => (
-							<div key={obj.code} value={obj.code}>
+							<option key={obj.code} value={obj.code}>
 								
 								{` ${obj.label}`}
-							</div>
+							</option>
 						))}
 					</select>
+          <button
+      id="theme-toggle"
+      type="button"
+      className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none focus:ring-0 rounded-full text-sm p-2.5"
+      onClick={(e)=>handleChangeLanguage(e.target.dataset.code)}
+    >
+      {true ? (
+        <span data-code="zh">中</span>
+      ) : (
+        <span>En</span>
+      )}
+    </button>
 				</div>
             </ul>
           </div>
