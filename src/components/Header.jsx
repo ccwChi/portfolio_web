@@ -2,6 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import Kala from "../assets/images/cubone.webp";
 import ThemeSwitcher from "../utils/ThemeSwitcher";
 import { BurgerIcon } from "../assets/iconData";
+import { useTranslation } from "react-i18next";
+
+// Languages List
+const languagesList = [
+	{ code: "zh", country: "tw", label: "繁體中文" },
+	{ code: "en", country: "us", label: "English" }, // Assuming "us" for English
+];
 
 const Header = () => {
   const headerRef = useRef(null);
@@ -49,6 +56,22 @@ const Header = () => {
       });
     }
   };
+
+
+  const {
+		i18n: { changeLanguage, language },
+	} = useTranslation();
+
+	useEffect(() => {
+		localStorage.setItem("selectedLanguage", language);
+	}, [language]);
+
+	const handleChangeLanguage = (event) => {
+		const selectedLanguage = event.target.value;
+		changeLanguage(selectedLanguage);
+		localStorage.setItem("selectedLanguage", selectedLanguage);
+	};
+
 
   return (
     <header
@@ -112,6 +135,21 @@ const Header = () => {
                   Portfolio
                 </a>
               </li>
+              <div className="flex gap-2 ml-4">
+					<select
+						value={language}
+						onChange={handleChangeLanguage}
+						size="small"
+						className="!h-9 !text-white !w-[90px] sm:!w-[220px]"
+						>
+						{languagesList.map((obj) => (
+							<div key={obj.code} value={obj.code}>
+								
+								{` ${obj.label}`}
+							</div>
+						))}
+					</select>
+				</div>
             </ul>
           </div>
         </div>
