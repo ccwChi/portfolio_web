@@ -3,21 +3,11 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import zh_tw_Json from "../locales/zh_TW.json";
-import vi_Json from "../locales/vi.json";
 import en_Json from "../locales/en.json";
-import ja_Json from "../locales/ja.json";
-import id_Json from "../locales/id.json";
-import ph_Json from "../locales/ph.json";
-import th_Json from "../locales/th.json";
 
 const resources = {
 	zh: { ...zh_tw_Json },
-	vi: { ...vi_Json },
 	en: { ...en_Json },
-	ja: { ...ja_Json },
-	id: { ...id_Json },
-	fil: { ...ph_Json },
-	th: { ...th_Json },
 };
 
 const defaultLanguage = "zh-TW";

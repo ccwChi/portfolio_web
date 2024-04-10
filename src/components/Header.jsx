@@ -6,13 +6,49 @@ import { useTranslation } from "react-i18next";
 
 // Languages List
 const languagesList = [
-	{ code: "zh", country: "tw", label: "繁體中文" },
-	{ code: "en", country: "us", label: "English" }, // Assuming "us" for English
+  { code: "zh", country: "tw", label: "繁體中文" },
+  { code: "en", country: "us", label: "English" }, // Assuming "us" for English
 ];
 
 const Header = () => {
   const headerRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 639);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // 清理副作用
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsOpen(false);
+    }
+  }, [isMobile]);
+  console.log("isOpen",isOpen)
+  console.log("isMobile",isMobile)
+  const {
+    i18n: { changeLanguage, language },
+  } = useTranslation();
+
+  useEffect(() => {
+    localStorage.setItem("selectedLanguage", language);
+  }, [language]);
+
+  const handleChangeLanguage = (lag) => {
+    // const selectedLanguage = event.target.value;
+    console.log(lag);
+    changeLanguage(lag);
+    localStorage.setItem("selectedLanguage", lag);
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -57,23 +93,6 @@ const Header = () => {
     }
   };
 
-
-  const {
-		i18n: { changeLanguage, language },
-	} = useTranslation();
-
-	useEffect(() => {
-		localStorage.setItem("selectedLanguage", language);
-	}, [language]);
-
-	const handleChangeLanguage = (lag) => {
-		// const selectedLanguage = event.target.value;
-    console.log(lag)
-		changeLanguage(lag);
-		localStorage.setItem("selectedLanguage", lag);
-	};
-
-
   return (
     <header
       ref={headerRef}
@@ -108,12 +127,12 @@ const Header = () => {
             } `}
             id="navbar-default"
           >
-            <ul className="font-medium flex flex-col p-4 sm:p-0 mt-4 border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0  dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700">
+            <ul className="font-medium flex flex-col sm:p-0 mt-4 border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0  dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700">
               <li>
                 <a
                   onClick={handleClick}
                   href="#about"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                  className="block p-2 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
                   About
                 </a>
@@ -122,7 +141,7 @@ const Header = () => {
                 <a
                   onClick={handleClick}
                   href="#timeline"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                  className="block p-2 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
                   Timeline
                 </a>
@@ -131,38 +150,24 @@ const Header = () => {
                 <a
                   onClick={handleClick}
                   href="#portfolio"
-                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                  className="block p-2 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
                   Portfolio
                 </a>
               </li>
-              <div className="flex gap-2 ml-4">
-					<select
-						value={language}
-						onChange={handleChangeLanguage}
-						size="small"
-						className="!h-9 "
-						>
-						{languagesList.map((obj) => (
-							<option key={obj.code} value={obj.code}>
-								
-								{` ${obj.label}`}
-							</option>
-						))}
-					</select>
-          <button
-      id="theme-toggle"
-      type="button"
-      className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none focus:ring-0 rounded-full text-sm p-2.5"
-      onClick={(e)=>handleChangeLanguage(e.target.dataset.code)}
-    >
-      {true ? (
-        <span data-code="zh">中</span>
-      ) : (
-        <span>En</span>
-      )}
-    </button>
-				</div>
+              <div className="block w-6 bg-blac">
+                <button
+                  type="button"
+                  className="border-black px-2  text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none text-sm "
+                  onClick={(e) => handleChangeLanguage(e.target.dataset.code)}
+                >
+                  {language === "en" ? (
+                    <span data-code="zh">中</span>
+                  ) : (
+                    <span data-code="en">En</span>
+                  )}
+                </button>
+              </div>
             </ul>
           </div>
         </div>
