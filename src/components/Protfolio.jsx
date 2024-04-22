@@ -2,12 +2,17 @@ import React from "react";
 import tempPic1 from "../assets/images/portfolio-01.jpg";
 import tempPic2 from "../assets/images/portfolio-02.jpg";
 import { GitIcon, LinkIcon, NotionIcon } from "../assets/iconData";
+import { useTranslation } from "react-i18next";
 
 const Protfolio = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="container sm:py-16 py-12 w-full flex flex-col">
       <div className="flex flex-col items-center pb-6 gap-2" id="portfolio">
-        <p className="text-3xl text-gray-900 dark:text-white">Protfolio</p>
+        <p className="text-3xl text-gray-900 dark:text-white">
+          {t("protfolio")}
+        </p>
         <p className="text-base pt-4 px-20 text-center max-w-[700px] text-gray-800 dark:text-gray-200"></p>
       </div>
       {/* 作品區域，上面是title */}
@@ -22,16 +27,13 @@ const Protfolio = () => {
           <div className="flex flex-col justify-center items-center p-4 md:p-0">
             <div className="flex flex-col flex-1 py-2 gap-2 overflow-y-auto">
               <p className="text-xl w-full md:text-start text-center text-gray-900 dark:text-white">
-                Pomodoro + ToDo list
+                {t("project01")}
               </p>
               <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
-                Many online Pomodoro clock templates lack a mechanism to avoid
-                resetting after refreshing the page. To prevent the time from
-                resetting upon refresh, I specifically implemented local storage
-                to disable the reset.
+                {t("project01des1")}
               </p>
               <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
-                + normal dragable todolist
+                {t("project01des2")}
               </p>
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
@@ -58,12 +60,10 @@ const Protfolio = () => {
           <div className="flex flex-col justify-center items-center p-4 md:p-0">
             <div className="flex flex-col flex-1 pb-6 pt-4 gap-2 overflow-y-auto">
               <p className="text-xl w-full md:text-start text-center text-gray-900 dark:text-white">
-                Boardgame Support Recorder
+                {t("project02")}
               </p>
               <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
-                This this for help me to record boardgame state, using websocket
-                on azure, more displays and presentations are available in the
-                Notion link below.
+                {t("project02des1")}
               </p>
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">

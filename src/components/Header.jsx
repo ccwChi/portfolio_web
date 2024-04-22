@@ -15,9 +15,12 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
+  const modelRef = useRef(null);
+  const { t } = useTranslation();
+  
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 641);
+      setIsMobile(window.innerWidth < 639);
     };
 
     window.addEventListener("resize", handleResize);
@@ -30,11 +33,25 @@ const Header = () => {
 
   useEffect(() => {
     if (!isMobile) {
-      setIsOpen(true);
+      setIsOpen(false);
     }
   }, [isMobile]);
-  console.log("isOpen", isOpen);
-  console.log("isMobile", isMobile);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modelRef.current && !modelRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [modelRef]);
+
+
   const {
     i18n: { changeLanguage, language },
   } = useTranslation();
@@ -59,9 +76,9 @@ const Header = () => {
         document.body.scrollTop > 80 ||
         document.documentElement.scrollTop > 80
       ) {
-        headerRef.current.classList.add("sticky_header");
+        headerRef.current?.classList.add("sticky_header");
       } else {
-        headerRef.current.classList.remove("sticky_header");
+        headerRef.current?.classList.remove("sticky_header");
       }
     });
   };
@@ -103,7 +120,7 @@ const Header = () => {
           <div className="flex items-center justify-center gap-x-2 ">
             <img src={Kala} className="h-8" alt="CuboneLogo" />
             <span className=" text-2xl font-semibold whitespace-nowrap dark:text-white ">
-              Jeff Personal Web
+            {t("webTitile")}
             </span>
             <span className="flex justify-center items-center">
               <ThemeSwitcher />
@@ -120,42 +137,47 @@ const Header = () => {
             <BurgerIcon />
           </button>
           <div
-            className={`w-full sm:block sm:w-auto ${
-              isOpen
-                ? "fixed z-[1000] rounded-lg w-[calc(100%)-10rem] left-0 p-10"
+            ref={modelRef}
+            className={`w-full sm:w-fit ${
+              !isMobile
+                ? "flex justify-center items-center "
+                : isOpen
+                ? "fixed w-full z-[1000] rounded-lg right-0 top-16 px-10"
                 : "hidden"
             } `}
             id="navbar-default"
           >
-            <ul className="font-medium flex flex-col sm:p-0 mt-4 border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0  dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700">
+            <ul
+              className={`font-medium  flex flex-col sm:p-0 mt-4 p-2 w-full border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0  dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700`}
+            >
               <li>
                 <a
                   onClick={handleClick}
                   href="#about"
-                  className="block p-2 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                  className="block p-1 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
-                  About
+                    {t("headerAbout")}
                 </a>
               </li>
               <li>
                 <a
                   onClick={handleClick}
                   href="#timeline"
-                  className="block p-2 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                  className="block p-1 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
-                  Timeline
+                    {t("headerTimeline")}
                 </a>
               </li>
               <li>
                 <a
                   onClick={handleClick}
                   href="#portfolio"
-                  className="block p-2 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                  className="block p-1 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
-                  Portfolio
+                  {t("headerPortfolio")}
                 </a>
               </li>
-              <div className="block w-6 bg-blac">
+              <div className="block w-4 bg-blac">
                 <button
                   type="button"
                   className="border-black px-2  text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-900 focus:outline-none text-sm "
@@ -177,55 +199,3 @@ const Header = () => {
 };
 
 export default Header;
-
-const a = {
-  employeeId: "EMP001",
-  assessmentDate: "2024-04-14",
-  jobDescription: "Sales Manager",
-  assessmentItems: [
-    {
-      category: "工作表現",
-      items: [
-        {
-          description: "完成銷售目標",
-          evaluation: "員工在本季度成功達成了指定的銷售目標，表現突出。",
-          score: 5,
-        },
-        {
-          description: "客戶滿意度",
-          evaluation:
-            "客戶對員工的服務態度和專業水平給予了高度評價，表現優秀。",
-          score: 4,
-        },
-      ],
-    },
-    {
-      category: "專業能力",
-      items: [
-        {
-          description: "行業知識",
-          evaluation:
-            "員工對行業動態和產品知識有著深入的了解，能夠有效應對客戶提出的問題。",
-          score: 5,
-        },
-        {
-          description: "溝通能力",
-          evaluation:
-            "員工與同事和客戶之間的溝通暢順，能夠清晰表達自己的想法。",
-          score: 4,
-        },
-      ],
-    },
-  ],
-  overallEvaluation: "員工在本次考核中表現優秀，獲得了高分。",
-  goals: [
-    {
-      description: "下季度銷售目標提升20%",
-      deadline: "2024-07-01",
-    },
-    {
-      description: "參加行業會議，提升專業知識",
-      deadline: "2024-05-15",
-    },
-  ],
-};

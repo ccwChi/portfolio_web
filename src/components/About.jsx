@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import Rowlet from "../assets/images/Rowlet1.jpg";
 import Jeff from "../assets/images/694167.webp";
+import { useTranslation } from "react-i18next";
 const About = () => {
   const [pic, setPic] = useState(1);
+  const { t } = useTranslation();
   return (
     // <div data-aos="fade-up" id="about" className="container md:py-32 py-6 ">
     //   <div className="flex flex-col items-center pb-6 gap-2" id="about">
     <div className="container sm:py-16 py-12 w-full flex flex-col gap-y-6">
       <div className="flex flex-col items-center pb-6 gap-2" id="about">
         <p className="text-3xl text-gray-900 dark:text-white text-center">
-          About Me
+          {t("aboutMe")}
         </p>
       </div>
       <div className="flex sm:flex-row flex-col px-2">
@@ -33,25 +35,21 @@ const About = () => {
             alt="rowletPic"
           ></img>
           <div className="py-2 px-3 text-gray-900 md:p-0 dark:text-white">
-            <p className="p-2 mt-2">This is what I usually like</p>
+            <p className="p-2 mt-2"> {t("photoDes")}</p>
           </div>
         </div>
         {/* 右邊框 */}
         <div className="p-2 sm:p-0 flex-1 flex flex-col gap-2 items-center">
           <div className="flex flex-col pb-6 gap-2 text-center sm:text-start">
             <p className="text-2xl text-gray-900 dark:text-white pt-0  md:pt-4 ">
-              I am Chao Chi (Jeff)
+              {t("Iam")}
             </p>
             <p className="text-base sm:text-lg text-gray-900 dark:text-white">
-              Now as a Frontend Developer
+              {t("nowAs")}
             </p>
 
             <p className="text-base sm:text-base text-gray-900 dark:text-gray-300 pt-6">
-              I graduated in Materials Science and have a passion for board
-              gaming. While seeking ways for game recording processes, I
-              discovered my enthusiasm for software development. This led me to
-              continuously learn in related fields, eventually transitioning
-              into the software industry.
+              {t("aboutDes")}
             </p>
           </div>
         </div>
