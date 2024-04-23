@@ -17,7 +17,7 @@ const Header = () => {
 
   const modelRef = useRef(null);
   const { t } = useTranslation();
-  
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 639);
@@ -44,13 +44,12 @@ const Header = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [modelRef]);
-
 
   const {
     i18n: { changeLanguage, language },
@@ -119,9 +118,14 @@ const Header = () => {
         <div className="flex flex-wrap justify-between mx-auto p-4 ">
           <div className="flex items-center justify-center gap-x-2 ">
             <img src={Kala} className="h-8" alt="CuboneLogo" />
-            <span className=" text-2xl font-semibold whitespace-nowrap dark:text-white ">
-            {t("webTitile")}
-            </span>
+            <a
+              className="text-2xl font-semibold whitespace-nowrap dark:text-white cursor-pointer"
+              href="https://github.com/ccwChi/portfolio_web"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t("webTitile")}
+            </a>
             <span className="flex justify-center items-center">
               <ThemeSwitcher />
             </span>
@@ -156,7 +160,7 @@ const Header = () => {
                   href="#about"
                   className="block p-1 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
-                    {t("headerAbout")}
+                  {t("headerAbout")}
                 </a>
               </li>
               <li>
@@ -165,7 +169,7 @@ const Header = () => {
                   href="#timeline"
                   className="block p-1 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
                 >
-                    {t("headerTimeline")}
+                  {t("headerTimeline")}
                 </a>
               </li>
               <li>
