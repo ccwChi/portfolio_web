@@ -1,5 +1,5 @@
 import React from "react";
-import tempPic1 from "../assets/images/portfolio-01.jpg";
+import tempPic1 from "../assets/images/todo.webp";
 import tempPic2 from "../assets/images/portfolio-02.jpg";
 import { GitIcon, LinkIcon, NotionIcon } from "../assets/iconData";
 import { useTranslation } from "react-i18next";
@@ -22,7 +22,7 @@ const Protfolio = () => {
           className="sm:px-4 p-0 flex flex-col md:flex-row gap-x-2 justify-center items-center"
         >
           <div className="h-fit min-w-[320px]">
-            <img src={tempPic1} className="h-48" alt="tempic1" />
+            <img src={tempPic1} className="h-48 aspect-[3/2]" alt="tempic1" />
           </div>
           <div className="flex flex-col justify-center items-center p-4 md:p-0">
             <div className="flex flex-col flex-1 py-2 gap-2 overflow-y-auto">
@@ -68,10 +68,14 @@ const Protfolio = () => {
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
               <span className="cursor-pointer">
-                <GitIcon />
+                <a href="https://ccwchi.github.io/todolist/">
+                  <GitIcon />
+                </a>
               </span>
               <span className="cursor-pointer">
-                <LinkIcon />
+                <a href="https://ccwchi.github.io/todolist/">
+                  <LinkIcon />
+                </a>
               </span>
               <span className="cursor-pointer">
                 <NotionIcon />
