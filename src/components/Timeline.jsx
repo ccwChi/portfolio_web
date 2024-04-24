@@ -57,7 +57,7 @@ const TimelinePart = ({ timelineData }) => {
                     <p className="text-xs text-gray-900 dark:text-green-50 my-1">
                       {data.date}
                     </p>
-                    <p className="text-base text-gray-900 dark:text-white">
+                    <p className="text-base font-thin text-gray-900 dark:text-white">
                       {t(data.date)}
                     </p>
                   </div>
@@ -73,21 +73,21 @@ const TimelinePart = ({ timelineData }) => {
 
 const timelineData = [
   {
-    date: "2023/02",
+    date: "2023.02",
   },
   {
-    date: "2023/04",
+    date: "2023.04",
   },
   {
-    date: "2023/07",
+    date: "2023.07",
   },
   {
-    date: "2023/08",
+    date: "2023.08",
   },
   {
-    date: "2024/01",
+    date: "2024.01",
   },
   {
-    date: "2024/03",
+    date: "2024.03",
   },
 ];

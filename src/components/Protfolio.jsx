@@ -1,6 +1,7 @@
 import React from "react";
 import tempPic1 from "../assets/images/todo.webp";
 import tempPic2 from "../assets/images/gloomhaven.webp";
+import tempPic3 from "../assets/images/drawio.webp";
 import { GitIcon, LinkIcon, NotionIcon } from "../assets/iconData";
 import { useTranslation } from "react-i18next";
 
@@ -31,9 +32,6 @@ const Protfolio = () => {
               </p>
               <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
                 {t("project01des1")}
-              </p>
-              <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
-                {t("project01des2")}
               </p>
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
@@ -94,12 +92,44 @@ const Protfolio = () => {
                 <LinkIcon />
               </a>
               <a
-                href="https://ccwchi.github.io/todolist/"
+                href="https://ccw-chi.notion.site/3dfb74e3657d47b7b92c5a47bb32627d"
                 className="cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <NotionIcon />
+              </a>
+            </div>
+          </div>
+        </div>
+        <hr
+          data-aos="fade-up"
+          className="w-full border-gray-200 sm:mx-auto dark:border-gray-700  "
+        />
+        <div
+          data-aos="fade-up"
+          className="sm:px-4 p-0 flex flex-col md:flex-row gap-x-2 justify-center items-center"
+        >
+          <div className="h-fit min-w-[320px]">
+            <img src={tempPic3} className="h-48 aspect-[3/2]" alt="tempic1" />
+          </div>
+          <div className="flex flex-col justify-center items-center p-4 md:p-0">
+            <div className="flex flex-col flex-1 pb-6 pt-4 gap-2 overflow-y-auto">
+              <p className="text-xl w-full md:text-start text-center text-gray-900 dark:text-white">
+                {t("project03")}
+              </p>
+              <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
+                {t("project03des1")}
+              </p>
+            </div>
+            <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
+              <a
+                href="https://drive.google.com/file/d/1lF4RryYQ662-5C_ZP8RIOWD9qr3znDmb/view?usp=drive_link"
+                className="cursor-pointer"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <LinkIcon />
               </a>
             </div>
           </div>
@@ -110,3 +140,4 @@ const Protfolio = () => {
 };
 
 export default Protfolio;
+
