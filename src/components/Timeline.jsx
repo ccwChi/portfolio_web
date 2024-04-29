@@ -7,7 +7,7 @@ const Timeline = () => {
     <div className="container sm:py-16 py-12 w-full flex flex-col gap-y-6">
       <div className="flex flex-col items-center pb-6 gap-2" id="timeline">
         <p className="text-3xl text-gray-900 dark:text-white text-center">
-          {t("protfolio")}
+          {t("timeline")}
         </p>
         <p className="text-base pt-4 sm:px-20 text-center max-w-[700px] text-gray-800 dark:text-gray-200">
           {t("currentDes1")}
