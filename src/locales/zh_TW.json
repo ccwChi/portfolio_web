@@ -25,6 +25,8 @@
         "project01des1": "許多線上番茄鐘模板在刷新頁面後會重置，為了防止時間在刷新後時間重置，因此特地使用了本地存儲來防止時間重置。",
         "project01des2": "+ 可拖拉式代辦清單",
         "project02": "桌遊支援記錄器",
-        "project02des1": "這是為了幫助我記錄桌遊狀態，使用 Azure 上的 Websocket，更多的顯示和演示請參見下方的 Notion 鏈接。"
+        "project02des1": "這是為了幫助我記錄桌遊狀態，使用 Azure 上的 Websocket，更多的顯示和演示請參見下方的 Notion 鏈接，但目前暫停 signalR 功能，僅能以影片介紹方式呈現",
+        "project03": "API實現記帳功能",
+        "project03des1": "利用 .NET 實作的 API 功能，目前能做到的是身分驗證、API 版本控制、Docker 佈署、azure 佈署。"
     }
 }
