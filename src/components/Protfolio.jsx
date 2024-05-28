@@ -2,7 +2,8 @@ import React from "react";
 import tempPic1 from "../assets/images/todo.webp";
 import tempPic2 from "../assets/images/gloomhaven.webp";
 import tempPic3 from "../assets/images/accountApi.webp";
-import tempPic4 from "../assets/images/drawio.webp";
+import tempPic4 from "../assets/images/WPFDataRecord.webp";
+import tempPic5 from "../assets/images/drawio.webp";
 import { GitIcon, LinkIcon, NotionIcon } from "../assets/iconData";
 import { useTranslation } from "react-i18next";
 
@@ -163,6 +164,46 @@ const Protfolio = () => {
               </p>
               <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
                 {t("project04des1")}
+              </p>
+            </div>
+            <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
+            <a
+                href="https://github.com/ccwChi/DataRecord"
+                className="cursor-pointer"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <GitIcon />
+              </a>
+              <a
+                href="https://ccw-chi.notion.site/WPF-APP-f612d13ca25242419b0f824caaaed98a?pvs=4"
+                className="cursor-pointer"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <NotionIcon />
+              </a>
+            </div>
+          </div>
+        </div>
+        <hr
+          data-aos="fade-up"
+          className="w-full border-gray-200 sm:mx-auto dark:border-gray-700  "
+        />
+        <div
+          data-aos="fade-up"
+          className="sm:px-4 p-0 flex flex-col md:flex-row gap-x-2 justify-center items-center"
+        >
+          <div className="h-fit min-w-[320px]">
+            <img src={tempPic5} className="h-48 aspect-[3/2]" alt="tempic1" />
+          </div>
+          <div className="flex flex-col justify-center items-center p-4 md:p-0">
+            <div className="flex flex-col flex-1 pb-6 pt-4 gap-2 overflow-y-auto">
+              <p className="text-xl w-full md:text-start text-center text-gray-900 dark:text-white">
+                {t("project05")}
+              </p>
+              <p className="text-base text-center md:text-start  text-gray-900 dark:text-gray-300">
+                {t("project05des1")}
               </p>
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">

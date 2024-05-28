@@ -28,7 +28,9 @@
     "project02des1": "This this for help me to record boardgame state, using signalR (websocket) on azure, more displays and presentations are available in the Notion link below.",
     "project03": "API for Accounting Functions",
     "project03des1": "Implemented API functionality using .NET. Currently, it supports authentication, API versioning, Docker deployment, and Azure deployment.",
-    "project04": "HRM Planning Overview",
-    "project04des1": "There was an opportunity in the past project to plan a personnel system, describing the system's design and functionalities. Although the system has not been adopted for implementation in the current company projects, I actively raised questions and considerations during the planning phase."
+    "project04": "WPF Data Storage",
+    "project04des1": "This data storage feature is built using .NET. It mainly includes a master list and sub-items, both of which can be added, deleted, and modified. The sub-items can store images and directly copy the images into the project's directory.",
+    "project05": "HRM Planning Overview",
+    "project05des1": "There was an opportunity in the past project to plan a personnel system, describing the system's design and functionalities. Although the system has not been adopted for implementation in the current company projects, I actively raised questions and considerations during the planning phase."
   }
 }
