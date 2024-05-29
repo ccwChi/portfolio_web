@@ -1,6 +1,6 @@
 {
   "translation": {
-    "webTitile": "Jeff Personal Web",
+    "webTitile": "Personal Web",
     "headerAbout": "About",
     "headerTimeline": "Timeline",
     "headerPortfolio": "Portfolio",
@@ -31,6 +31,8 @@
     "project04": "WPF Data Storage",
     "project04des1": "This data storage feature is built using .NET. It mainly includes a master list and sub-items, both of which can be added, deleted, and modified. The sub-items can store images and directly copy the images into the project's directory.",
     "project05": "HRM Planning Overview",
-    "project05des1": "There was an opportunity in the past project to plan a personnel system, describing the system's design and functionalities. Although the system has not been adopted for implementation in the current company projects, I actively raised questions and considerations during the planning phase."
+    "project05des1": "There was an opportunity in the past project to plan a personnel system, describing the system's design and functionalities. Although the system has not been adopted for implementation in the current company projects, I actively raised questions and considerations during the planning phase.",
+    "loadingWeatherAPI": "Loading weather data...",
+    "weathertitle": "36-Hour temperature forecast (Meteorological Bureau)"
   }
 }

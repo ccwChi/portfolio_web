@@ -8,6 +8,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "aos": "^2.3.4",
+    "apexcharts": "^3.49.1",
+    "flowbite": "^2.3.0",
     "gh-pages": "^6.1.1",
     "i18next": "^23.11.0",
     "react": "^18.2.0",
@@ -50,5 +52,6 @@
   "main": "tailwind.config.js",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "proxy": "https://opendata.cwa.gov.tw"
 }
