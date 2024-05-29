@@ -73,7 +73,6 @@ const Weather = () => {
       getData(weatherUrl).then((result) => {
         if (result.result) {
           const [data] = result.records?.location;
-          console.log("apidata", data);
           setApiData(data);
         } else {
           setApiData({});
