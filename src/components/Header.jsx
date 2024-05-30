@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Kala from "../assets/images/cubone.webp";
 import ThemeSwitcher from "../utils/ThemeSwitcher";
-import { BurgerIcon } from "../assets/iconData";
+import { BurgerIcon, GitIcon } from "../assets/iconData";
 import { useTranslation } from "react-i18next";
 
 // Languages List
@@ -117,15 +117,17 @@ const Header = () => {
       <div className="container">
         <div className="flex flex-wrap justify-between mx-auto p-4 ">
           <div className="flex items-center justify-center gap-x-2 ">
-            <img src={Kala} className="h-8" alt="CuboneLogo" />
             <a
-              className="text-2xl font-semibold whitespace-nowrap dark:text-white cursor-pointer"
               href="https://github.com/ccwChi/portfolio_web"
+              className="cursor-pointer"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {t("webTitile")}
+              <GitIcon />
             </a>
+            <p className="text-2xl font-semibold whitespace-nowrap dark:text-white cursor-pointer">
+              {t("webTitile")}
+            </p>
             <span className="flex justify-center items-center">
               <ThemeSwitcher />
             </span>

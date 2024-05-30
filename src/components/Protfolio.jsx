@@ -78,14 +78,6 @@ const Protfolio = () => {
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
               <a
-                href="https://github.com/ccwChi/gloomhaven"
-                className="cursor-pointer"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <GitIcon />
-              </a>
-              <a
                 href="https://ccwchi.github.io/gloomhaven/"
                 className="cursor-pointer"
                 target="_blank"

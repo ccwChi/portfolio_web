@@ -3,7 +3,7 @@ import ApexCharts from "apexcharts";
 import { getData } from "../utils/api";
 import LoadingSpinner from "../assets/images/loading";
 import { useTranslation } from "react-i18next";
-
+import { contryData } from "../assets/data/ContryData";
 const Weather = () => {
   const chartRef = useRef(null);
   const [apiData, setApiData] = useState(null);
@@ -12,7 +12,7 @@ const Weather = () => {
     latitude: null,
     longitude: null,
   });
-  const [location, setLocation] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("");
   const [error, setError] = useState(null);
   const { t } = useTranslation();
   // 取得使用者位置
@@ -33,10 +33,13 @@ const Weather = () => {
       setError("目前設定/瀏覽器不支援取得位置");
     }
   };
+
+  // 開啟網頁就先取得座標位置
   useEffect(() => {
     handleGetLocation();
   }, []);
 
+  // 當取得瀏覽器座標後，打 api 取得當前座標的台灣地址。然後取"縣市"之後要打天氣 api
   useEffect(() => {
     if (coordinates !== null) {
       const baseUrl = "https://nominatim.openstreetmap.org/reverse?format=json";
@@ -46,6 +49,7 @@ const Weather = () => {
         .then((response) => response.json())
         .then((data) => {
           const address = data.display_name;
+          console.log("address", address);
 
           const reorderAddress = (apiResult) => {
             const addressArray = apiResult.split(", ").reverse();
@@ -58,7 +62,19 @@ const Weather = () => {
           };
           const reorderedAddress = reorderAddress(address);
 
-          setLocation(reorderedAddress.slice(3, 6));
+          const cleanedAddress = reorderedAddress
+            .replace(/^\d{3,5}/, "")
+            .slice(0, 3);
+
+          // 檢查cleanedAddress是否在data清單中
+          const isInData = contryData.some((item) =>
+            item.value.startsWith(cleanedAddress)
+          );
+          if (isInData) {
+            setSelectedOption(cleanedAddress);
+          } else {
+            setSelectedOption("臺南市");
+          }
         })
         .catch((error) => {
           console.error("Error:", "呼叫次數/頻率過高，導致呼叫已受到限制");
@@ -67,9 +83,10 @@ const Weather = () => {
     }
   }, [coordinates]);
 
+  // 當有選擇縣市時，打氣象局 api 取得資料
   useEffect(() => {
-    if (location) {
-      let weatherUrl = `locationName=${location}&elementName=MinT,MaxT`;
+    if (selectedOption) {
+      let weatherUrl = `locationName=${selectedOption}&elementName=MinT,MaxT`;
       getData(weatherUrl).then((result) => {
         if (result.result) {
           const [data] = result.records?.location;
@@ -79,8 +96,9 @@ const Weather = () => {
         }
       });
     }
-  }, [location]);
+  }, [selectedOption]);
 
+  // 下面這串是取得氣象局資料後，將資料代入圖表中
   useEffect(() => {
     const options = {
       chart: {
@@ -213,10 +231,15 @@ const Weather = () => {
             </div>
           </>
         )}
-        <div>
-          <p className="text-base text-gray-900 dark:text-white pt-0  md:pt-4 ">
-            {t("weathertitle")} {location && "- " + location}
+        <div className="flex flex-col-reverse  sm:justify-between sm:flex-row">
+          <p className="text-base text-gray-900 dark:text-white pt-2  md:pt-2 ">
+            {t("weathertitle")} {selectedOption && "- " + selectedOption}
           </p>
+          <DropdownButton
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            contryData={contryData}
+          />
         </div>
 
         <div id="line-chart" ref={chartRef}></div>
@@ -228,21 +251,46 @@ const Weather = () => {
 
 export default Weather;
 
-// <div>
-//         <h1>Geolocation Example</h1>
-//         <button onClick={handleGetLocation}>Get Location</button>
-//         {coordinates.latitude && coordinates.longitude && (
-//           <div>
-//             <p className="text-3xl text-gray-900 dark:text-white">
-//               Latitude: {coordinates.latitude ? coordinates.latitude : ""}
-//             </p>
-//             <p className="text-3xl text-gray-900 dark:text-white">
-//               Longitude: {coordinates.longitude ? coordinates.longitude : ""}
-//             </p>
-//             <p className="text-3xl text-gray-900 dark:text-white">
-//               Addrss:{location || ""}
-//             </p>
-//           </div>
-//         )}
-//         {error && <p>Error: {error}</p>}
-//       </div>
+const DropdownButton = ({ selectedOption, setSelectedOption, contryData }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative inline-block text-left">
+      <button
+        onClick={toggleDropdown}
+        className="h-10 text-black bg-transparent hover:bg-gray-200 border font-medium rounded-md text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-blue-700 dark:text-white"
+        type="button"
+      >
+        {selectedOption || "選擇縣市"}
+      </button>
+      {isOpen && (
+        <div className="z-10 absolute h-52 mt-1 w-36  overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
+          <ul
+            className="py-2 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdownDefaultButton"
+          >
+            {contryData.map((item, index) => (
+              <li key={index}>
+                <div
+                  onClick={() => handleOptionClick(item.value)}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  {item.value}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
