@@ -9,7 +9,7 @@ const Timeline = () => {
         <p className="text-3xl text-gray-900 dark:text-white text-center">
           {t("timeline")}
         </p>
-        <p className="text-base pt-4 sm:px-20 text-center max-w-[700px] text-gray-800 dark:text-gray-200">
+        <p className="text-lg pt-4 sm:px-20 text-center max-w-[700px] text-gray-800 dark:text-gray-200">
           {t("currentDes1")}
           <span className="text-sm text-gray-600 dark:text-gray-400">
             {t("currentDes2")}
@@ -57,7 +57,7 @@ const TimelinePart = ({ timelineData }) => {
                     <p className="text-xs text-gray-900 dark:text-green-50 my-1">
                       {data.date}
                     </p>
-                    <p className="text-base font-thin text-gray-900 dark:text-white">
+                    <p className="text-lg font-thin text-gray-900 dark:text-white">
                       {t(data.date)}
                     </p>
                   </div>
@@ -66,6 +66,24 @@ const TimelinePart = ({ timelineData }) => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex items-center flex-col sm:flex-row">
+        <div className={`flex w-full mx-auto items-center relative`}>
+          <div className={`w-full`}>
+            <div
+              // data-aos="fade-right"
+              data-aos={"fade-up"}
+              className="dark:bg-gray-800 bg-slate-100 rounded-md shadow-[1px_1px_2px_(0,0,0,0.1)] shadow-gray-300 flex-1 p-3"
+            >
+              <p className="text-lg text-gray-900 dark:text-green-50 my-1">
+                {t("aboutnow-1")}
+              </p>
+              <p className="text-lg text-gray-900 dark:text-green-50 my-1">
+                {t("aboutnow-2")}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
@@ -89,5 +107,8 @@ const timelineData = [
   },
   {
     date: "2024.03",
+  },
+  {
+    date: "2024.07",
   },
 ];

@@ -1,9 +1,9 @@
 import React from "react";
-import tempPic1 from "../assets/images/todo.webp";
+import tempPic1 from "../assets/images/mynote.webp";
 import tempPic2 from "../assets/images/gloomhaven.webp";
 import tempPic3 from "../assets/images/accountApi.webp";
 import tempPic4 from "../assets/images/WPFDataRecord.webp";
-import tempPic5 from "../assets/images/drawio.webp";
+import tempPic5 from "../assets/images/twosholder.jpg";
 import { GitIcon, LinkIcon, NotionIcon } from "../assets/iconData";
 import { useTranslation } from "react-i18next";
 
@@ -37,16 +37,16 @@ const Protfolio = () => {
               </p>
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
-              <a
+              {/* <a
                 href="https://github.com/ccwChi/todolist"
                 className="cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <GitIcon />
-              </a>
+              </a> */}
               <a
-                href="https://ccwchi.github.io/todolist/"
+                href="https://ccw-chi.notion.site/1722a733fb1280448620dc81dc76a61b"
                 className="cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -94,7 +94,6 @@ const Protfolio = () => {
                 <NotionIcon />
               </a>
             </div>
-            
           </div>
         </div>
         <hr
@@ -135,7 +134,6 @@ const Protfolio = () => {
                 <LinkIcon />
               </a>
             </div>
-            
           </div>
         </div>
         <hr
@@ -159,7 +157,7 @@ const Protfolio = () => {
               </p>
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
-            <a
+              <a
                 href="https://github.com/ccwChi/DataRecord"
                 className="cursor-pointer"
                 target="_blank"
@@ -200,7 +198,7 @@ const Protfolio = () => {
             </div>
             <div className="flex w-full justify-center md:justify-start md:text-start text-center gap-x-2">
               <a
-                href="https://drive.google.com/file/d/1lF4RryYQ662-5C_ZP8RIOWD9qr3znDmb/view?usp=drive_link"
+                href="https://ccwchi.github.io/twoshoulder/"
                 className="cursor-pointer"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -216,4 +214,3 @@ const Protfolio = () => {
 };
 
 export default Protfolio;
-
