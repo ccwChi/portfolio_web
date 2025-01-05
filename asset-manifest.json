@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/portfolio_web/static/css/main.47a5903f.css",
-    "main.js": "/portfolio_web/static/js/main.e6c7cff7.js",
+    "main.css": "/portfolio_web/static/css/main.6e2550b0.css",
+    "main.js": "/portfolio_web/static/js/main.43412a54.js",
     "static/media/GenJyuuGothic-Normal.ttf": "/portfolio_web/static/media/GenJyuuGothic-Normal.f9efdb146a504cab4c41.ttf",
+    "static/media/twosholder.jpg": "/portfolio_web/static/media/twosholder.61a19eaddbbc4690ed5b.jpg",
     "static/media/gloomhaven.webp": "/portfolio_web/static/media/gloomhaven.24c9b98255ab732cdbf6.webp",
     "static/media/694167.webp": "/portfolio_web/static/media/694167.292294d1452509c8af2f.webp",
+    "static/media/mynote.webp": "/portfolio_web/static/media/mynote.8f797493c3dd7b89d814.webp",
     "static/media/WPFDataRecord.webp": "/portfolio_web/static/media/WPFDataRecord.0da9f6182105f65e4607.webp",
-    "static/media/todo.webp": "/portfolio_web/static/media/todo.c37cd29fee781c1f64ea.webp",
     "static/media/cubone.webp": "/portfolio_web/static/media/cubone.49cb16a3bcaa5aee2b7a.webp",
     "static/media/accountApi.webp": "/portfolio_web/static/media/accountApi.af65ed98869b8ef6db54.webp",
-    "static/media/drawio.webp": "/portfolio_web/static/media/drawio.2005921199d9873f444f.webp",
     "index.html": "/portfolio_web/index.html",
-    "main.47a5903f.css.map": "/portfolio_web/static/css/main.47a5903f.css.map",
-    "main.e6c7cff7.js.map": "/portfolio_web/static/js/main.e6c7cff7.js.map"
+    "main.6e2550b0.css.map": "/portfolio_web/static/css/main.6e2550b0.css.map",
+    "main.43412a54.js.map": "/portfolio_web/static/js/main.43412a54.js.map"
   },
   "entrypoints": [
-    "static/css/main.47a5903f.css",
-    "static/js/main.e6c7cff7.js"
+    "static/css/main.6e2550b0.css",
+    "static/js/main.43412a54.js"
   ]
 }
