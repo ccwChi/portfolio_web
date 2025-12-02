@@ -41,15 +41,28 @@ const Weather = () => {
 
   // 當取得瀏覽器座標後，打 api 取得當前座標的台灣地址。然後取"縣市"之後要打天氣 api
   useEffect(() => {
-    if (coordinates !== null) {
+    // 確保 latitude 和 longitude 都不是 null
+    if (coordinates.latitude !== null && coordinates.longitude !== null) {
       const baseUrl = "https://nominatim.openstreetmap.org/reverse?format=json";
       const apiUrl = `${baseUrl}&lat=${coordinates.latitude}&lon=${coordinates.longitude}`;
 
       fetch(apiUrl)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
-          const address = data.display_name;
+          const address = data?.display_name;
           console.log("address", address);
+
+          // 檢查 address 是否存在
+          if (!address) {
+            console.warn("無法取得地址資訊，使用預設城市");
+            setSelectedOption("臺南市");
+            return;
+          }
 
           const reorderAddress = (apiResult) => {
             const addressArray = apiResult.split(", ").reverse();
@@ -77,8 +90,9 @@ const Weather = () => {
           }
         })
         .catch((error) => {
-          console.error("Error:", "呼叫次數/頻率過高，導致呼叫已受到限制");
-          console.error("Error:", error);
+          console.error("取得地理位置失敗:", error.message);
+          // 發生錯誤時使用預設城市
+          setSelectedOption("臺南市");
         });
     }
   }, [coordinates]);
@@ -87,14 +101,30 @@ const Weather = () => {
   useEffect(() => {
     if (selectedOption) {
       let weatherUrl = `locationName=${selectedOption}&elementName=MinT,MaxT`;
-      getData(weatherUrl).then((result) => {
-        if (result.result) {
-          const [data] = result.records?.location;
-          setApiData(data);
-        } else {
-          setApiData({});
-        }
-      });
+      getData(weatherUrl)
+        .then((result) => {
+          // 檢查 API 回應是否成功
+          if (result?.success === "true" && result?.records?.location) {
+            const [data] = result.records.location;
+            // 確保資料結構完整
+            if (data?.weatherElement && data.weatherElement.length >= 2) {
+              setApiData(data);
+            } else {
+              console.error("氣象資料結構不完整");
+              setApiData(null);
+              setError("無法取得完整的氣象資料");
+            }
+          } else {
+            console.error("API 回應失敗或無資料", result);
+            setApiData(null);
+            setError("無法取得氣象資料，請檢查 API Key 設定");
+          }
+        })
+        .catch((error) => {
+          console.error("取得氣象資料失敗:", error);
+          setApiData(null);
+          setError("取得氣象資料失敗");
+        });
     }
   }, [selectedOption]);
 
@@ -139,30 +169,18 @@ const Weather = () => {
         {
           name: "最高溫",
           data: [
-            apiData
-              ? apiData.weatherElement[1]?.time[0]?.parameter?.parameterName
-              : "",
-            apiData
-              ? apiData.weatherElement[1]?.time[1]?.parameter?.parameterName
-              : "",
-            apiData
-              ? apiData.weatherElement[1]?.time[2]?.parameter?.parameterName
-              : "",
+            apiData?.weatherElement?.[1]?.time?.[0]?.parameter?.parameterName || "N/A",
+            apiData?.weatherElement?.[1]?.time?.[1]?.parameter?.parameterName || "N/A",
+            apiData?.weatherElement?.[1]?.time?.[2]?.parameter?.parameterName || "N/A",
           ],
           color: "#E0550D",
         },
         {
           name: "最低溫",
           data: [
-            apiData
-              ? apiData.weatherElement[0]?.time[0]?.parameter?.parameterName
-              : "",
-            apiData
-              ? apiData.weatherElement[0]?.time[1]?.parameter?.parameterName
-              : "",
-            apiData
-              ? apiData.weatherElement[0]?.time[2]?.parameter?.parameterName
-              : "",
+            apiData?.weatherElement?.[0]?.time?.[0]?.parameter?.parameterName || "N/A",
+            apiData?.weatherElement?.[0]?.time?.[1]?.parameter?.parameterName || "N/A",
+            apiData?.weatherElement?.[0]?.time?.[2]?.parameter?.parameterName || "N/A",
           ],
           color: "gray",
         },
@@ -172,24 +190,24 @@ const Weather = () => {
       },
       xaxis: {
         categories: [
-          apiData
+          apiData?.weatherElement?.[0]?.time?.[0]?.startTime
             ? apiData.weatherElement[0].time[0].startTime
                 .slice(5, 11)
                 .replace("-", "/") +
               apiData.weatherElement[0].time[0].startTime.slice(11, 16)
-            : "",
-          apiData
+            : "N/A",
+          apiData?.weatherElement?.[0]?.time?.[1]?.startTime
             ? apiData.weatherElement[0].time[1].startTime
                 .slice(5, 11)
                 .replace("-", "/") +
               apiData.weatherElement[0].time[1].startTime.slice(11, 16)
-            : "",
-          apiData
+            : "N/A",
+          apiData?.weatherElement?.[0]?.time?.[2]?.startTime
             ? apiData.weatherElement[0].time[2].startTime
                 .slice(5, 11)
                 .replace("-", "/") +
               apiData.weatherElement[0].time[2].startTime.slice(11, 16)
-            : "",
+            : "N/A",
         ],
         labels: {
           show: true,
