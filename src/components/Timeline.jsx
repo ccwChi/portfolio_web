@@ -91,13 +91,13 @@ const TimelinePart = ({ timelineData }) => {
 
 const timelineData = [
   {
-    date: "2023.02",
+    date: "2023.01",
   },
   {
     date: "2023.04",
   },
   {
-    date: "2023.07",
+    date: "2023.06",
   },
   {
     date: "2023.08",
@@ -110,5 +110,11 @@ const timelineData = [
   },
   {
     date: "2024.07",
+  },
+  {
+    date: "2024.09",
+  },
+  {
+    date: "2025.01",
   },
 ];
