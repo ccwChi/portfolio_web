@@ -148,13 +148,13 @@ const Header = () => {
               !isMobile
                 ? "flex justify-center items-center "
                 : isOpen
-                ? "fixed w-full z-[1000] rounded-lg right-0 top-16 px-10"
+                ? "fixed w-full z-[1000] rounded-lg right-0 top-16 px-4"
                 : "hidden"
             } `}
             id="navbar-default"
           >
             <ul
-              className={`font-medium  flex flex-col sm:p-0 mt-4 p-2 w-full border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0  dark:bg-gray-800 sm:dark:bg-gray-900 dark:border-gray-700`}
+              className={`font-medium flex flex-col sm:p-0 mt-4 p-4 w-full border border-gray-100 rounded-lg sm:flex-row sm:space-x-8 rtl:space-x-reverse sm:mt-0 sm:border-0 bg-gray-100 dark:bg-gray-800 sm:bg-transparent sm:dark:bg-gray-900 dark:border-gray-700 shadow-lg sm:shadow-none`}
             >
               <li>
                 <a
