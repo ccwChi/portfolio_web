@@ -118,7 +118,7 @@ const Header = () => {
         <div className="flex flex-wrap justify-between mx-auto p-4 ">
           <div className="flex items-center justify-center gap-x-2 ">
             <a
-              href="https://github.com/ccwChi/portfolio_web"
+              href="https://github.com/ccwChi"
               className="cursor-pointer"
               target="_blank"
               rel="noopener noreferrer"
@@ -174,7 +174,7 @@ const Header = () => {
                   {t("headerTimeline")}
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a
                   onClick={handleClick}
                   href="#portfolio"
@@ -182,7 +182,7 @@ const Header = () => {
                 >
                   {t("headerPortfolio")}
                 </a>
-              </li>
+              </li> */}
               <div className="block w-4 bg-blac">
                 <button
                   type="button"

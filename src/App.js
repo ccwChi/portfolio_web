@@ -19,7 +19,7 @@ function App() {
       <Header />
       <About />
       <Timeline />
-      <Protfolio />
+      {/* <Protfolio /> */}
       <Weather />
       <Footer />
     </div>

@@ -1,314 +1,273 @@
 import React, { useEffect, useRef, useState } from "react";
 import ApexCharts from "apexcharts";
 import { getData } from "../utils/api";
-import LoadingSpinner from "../assets/images/loading";
 import { useTranslation } from "react-i18next";
 import { contryData } from "../assets/data/ContryData";
+
+// 天氣圖示
+const WeatherIcon = ({ description, size = "text-4xl" }) => {
+  const getIcon = () => {
+    if (!description) return "☀️";
+    if (description.includes("雷")) return "⛈️";
+    if (description.includes("雨")) return "🌧️";
+    if (description.includes("陰")) return "☁️";
+    if (description.includes("雲")) return "⛅";
+    if (description.includes("晴")) return "☀️";
+    return "🌤️";
+  };
+  return <span className={size}>{getIcon()}</span>;
+};
+
+// 城市選擇器
+const CitySelector = ({ selected, setSelected, data }) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-full text-gray-700 dark:text-white text-sm font-medium transition-all"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        {selected || "選擇縣市"}
+        <svg className={`w-4 h-4 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute z-30 right-0 mt-2 w-44 max-h-64 overflow-y-auto bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+          {data.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => { setSelected(item.value); setOpen(false); }}
+              className={`w-full px-4 py-2.5 text-left text-sm transition-colors ${
+                selected === item.value
+                  ? "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-medium"
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+              }`}
+            >
+              {item.value}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Loading
+const Loading = () => (
+  <div className="flex flex-col items-center justify-center py-20">
+    <div className="w-10 h-10 border-3 border-gray-200 border-t-gray-600 rounded-full animate-spin" />
+    <p className="text-gray-500 mt-4 text-sm">載入天氣資料中...</p>
+  </div>
+);
+
+// 主元件
 const Weather = () => {
   const chartRef = useRef(null);
   const [apiData, setApiData] = useState(null);
-
-  const [coordinates, setCoordinates] = useState({
-    latitude: null,
-    longitude: null,
-  });
   const [selectedOption, setSelectedOption] = useState("");
-  const [error, setError] = useState(null);
+  const [coordinates, setCoordinates] = useState({ latitude: null, longitude: null });
   const { t } = useTranslation();
-  // 取得使用者位置
-  const handleGetLocation = () => {
+
+  // 取得位置
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setCoordinates({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-          });
-        },
-        (err) => {
-          setError(err.message);
-        }
+        (pos) => setCoordinates({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
+        () => setSelectedOption("臺南市")
       );
     } else {
-      setError("目前設定/瀏覽器不支援取得位置");
+      setSelectedOption("臺南市");
     }
-  };
-
-  // 開啟網頁就先取得座標位置
-  useEffect(() => {
-    handleGetLocation();
   }, []);
 
-  // 當取得瀏覽器座標後，打 api 取得當前座標的台灣地址。然後取"縣市"之後要打天氣 api
+  // 座標轉城市
   useEffect(() => {
-    // 確保 latitude 和 longitude 都不是 null
-    if (coordinates.latitude !== null && coordinates.longitude !== null) {
-      const baseUrl = "https://nominatim.openstreetmap.org/reverse?format=json";
-      const apiUrl = `${baseUrl}&lat=${coordinates.latitude}&lon=${coordinates.longitude}`;
-
-      fetch(apiUrl)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => {
-          const address = data?.display_name;
-          console.log("address", address);
-
-          // 檢查 address 是否存在
-          if (!address) {
-            console.warn("無法取得地址資訊，使用預設城市");
-            setSelectedOption("臺南市");
-            return;
-          }
-
-          const reorderAddress = (apiResult) => {
-            const addressArray = apiResult.split(", ").reverse();
-            const reorderedAddressArray = addressArray.filter(
-              (part) => part !== "臺灣"
-            );
-            const reorderedAddress = reorderedAddressArray.join("");
-
-            return reorderedAddress;
-          };
-          const reorderedAddress = reorderAddress(address);
-
-          const cleanedAddress = reorderedAddress
-            .replace(/^\d{3,5}/, "")
-            .slice(0, 3);
-
-          // 檢查cleanedAddress是否在data清單中
-          const isInData = contryData.some((item) =>
-            item.value.startsWith(cleanedAddress)
-          );
-          if (isInData) {
-            setSelectedOption(cleanedAddress);
-          } else {
-            setSelectedOption("臺南市");
-          }
-        })
-        .catch((error) => {
-          console.error("取得地理位置失敗:", error.message);
-          // 發生錯誤時使用預設城市
-          setSelectedOption("臺南市");
-        });
-    }
+    if (!coordinates.latitude || !coordinates.longitude) return;
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${coordinates.latitude}&lon=${coordinates.longitude}`)
+      .then((r) => r.json())
+      .then((data) => {
+        const addr = data?.display_name;
+        if (!addr) { setSelectedOption("臺南市"); return; }
+        const cleaned = addr.split(", ").reverse().filter((p) => p !== "臺灣").join("").replace(/^\d{3,5}/, "").slice(0, 3);
+        const found = contryData.some((item) => item.value.startsWith(cleaned));
+        setSelectedOption(found ? cleaned : "臺南市");
+      })
+      .catch(() => setSelectedOption("臺南市"));
   }, [coordinates]);
 
-  // 當有選擇縣市時，打氣象局 api 取得資料
+  // 取得天氣
   useEffect(() => {
-    if (selectedOption) {
-      let weatherUrl = `locationName=${selectedOption}&elementName=MinT,MaxT`;
-      getData(weatherUrl)
-        .then((result) => {
-          // 檢查 API 回應是否成功
-          if (result?.success === "true" && result?.records?.location) {
-            const [data] = result.records.location;
-            // 確保資料結構完整
-            if (data?.weatherElement && data.weatherElement.length >= 2) {
-              setApiData(data);
-            } else {
-              console.error("氣象資料結構不完整");
-              setApiData(null);
-              setError("無法取得完整的氣象資料");
-            }
-          } else {
-            console.error("API 回應失敗或無資料", result);
-            setApiData(null);
-            setError("無法取得氣象資料，請檢查 API Key 設定");
-          }
-        })
-        .catch((error) => {
-          console.error("取得氣象資料失敗:", error);
-          setApiData(null);
-          setError("取得氣象資料失敗");
-        });
-    }
+    if (!selectedOption) return;
+    setApiData(null);
+    getData(`locationName=${selectedOption}&elementName=MinT,MaxT,Wx`)
+      .then((res) => {
+        if (res?.success === "true" && res?.records?.location?.[0]) {
+          setApiData(res.records.location[0]);
+        }
+      })
+      .catch(() => {});
   }, [selectedOption]);
 
-  // 下面這串是取得氣象局資料後，將資料代入圖表中
+  // 圖表
   useEffect(() => {
+    if (!apiData || !chartRef.current) return;
+    const minT = apiData.weatherElement?.find((e) => e.elementName === "MinT");
+    const maxT = apiData.weatherElement?.find((e) => e.elementName === "MaxT");
+    if (!minT || !maxT) return;
+
+    const isDark = document.documentElement.classList.contains("dark");
+    const textColor = isDark ? "#9ca3af" : "#6b7280";
+    const gridColor = isDark ? "#374151" : "#e5e7eb";
+
     const options = {
       chart: {
-        height: "100%",
-        maxWidth: "100%",
+        height: 280,
         type: "line",
+        toolbar: { show: false },
         fontFamily: "Inter, sans-serif",
+        background: "transparent",
         dropShadow: {
-          enabled: false,
-        },
-        toolbar: {
-          show: false,
+          enabled: true,
+          top: 3,
+          left: 0,
+          blur: 4,
+          opacity: 0.1,
         },
       },
-      tooltip: {
-        enabled: true,
-        x: {
-          show: false,
-        },
+      stroke: { width: 3, curve: "smooth" },
+      colors: ["#ef4444", "#3b82f6"],
+      markers: {
+        size: 6,
+        strokeWidth: 2,
+        strokeColors: isDark ? "#1f2937" : "#fff",
+        hover: { size: 8 },
       },
       dataLabels: {
         enabled: true,
-      },
-      stroke: {
-        width: 6,
-        curve: "smooth",
-      },
-      grid: {
-        show: true,
-        strokeDashArray: 4,
-        padding: {
-          left: 40,
-          right: 40,
-          top: 0,
-        },
+        formatter: (val) => `${val}°`,
+        offsetY: -8,
+        style: { fontSize: "12px", colors: [textColor] },
+        background: { enabled: false },
       },
       series: [
-        {
-          name: "最高溫",
-          data: [
-            apiData?.weatherElement?.[1]?.time?.[0]?.parameter?.parameterName || "N/A",
-            apiData?.weatherElement?.[1]?.time?.[1]?.parameter?.parameterName || "N/A",
-            apiData?.weatherElement?.[1]?.time?.[2]?.parameter?.parameterName || "N/A",
-          ],
-          color: "#E0550D",
-        },
-        {
-          name: "最低溫",
-          data: [
-            apiData?.weatherElement?.[0]?.time?.[0]?.parameter?.parameterName || "N/A",
-            apiData?.weatherElement?.[0]?.time?.[1]?.parameter?.parameterName || "N/A",
-            apiData?.weatherElement?.[0]?.time?.[2]?.parameter?.parameterName || "N/A",
-          ],
-          color: "gray",
-        },
+        { name: "最高溫", data: maxT.time.map((t) => parseInt(t.parameter.parameterName)) },
+        { name: "最低溫", data: minT.time.map((t) => parseInt(t.parameter.parameterName)) },
       ],
-      legend: {
-        show: true,
-      },
       xaxis: {
-        categories: [
-          apiData?.weatherElement?.[0]?.time?.[0]?.startTime
-            ? apiData.weatherElement[0].time[0].startTime
-                .slice(5, 11)
-                .replace("-", "/") +
-              apiData.weatherElement[0].time[0].startTime.slice(11, 16)
-            : "N/A",
-          apiData?.weatherElement?.[0]?.time?.[1]?.startTime
-            ? apiData.weatherElement[0].time[1].startTime
-                .slice(5, 11)
-                .replace("-", "/") +
-              apiData.weatherElement[0].time[1].startTime.slice(11, 16)
-            : "N/A",
-          apiData?.weatherElement?.[0]?.time?.[2]?.startTime
-            ? apiData.weatherElement[0].time[2].startTime
-                .slice(5, 11)
-                .replace("-", "/") +
-              apiData.weatherElement[0].time[2].startTime.slice(11, 16)
-            : "N/A",
-        ],
-        labels: {
-          show: true,
-          style: {
-            fontFamily: "Inter, sans-serif",
-            cssClass: "text-xs font-normal fill-gray-500 dark:fill-gray-400",
-          },
-        },
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
+        categories: minT.time.map((t) => {
+          const d = new Date(t.startTime);
+          return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:00`;
+        }),
+        labels: { style: { colors: textColor, fontSize: "11px" } },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
       },
       yaxis: {
-        show: false,
+        labels: {
+          formatter: (val) => `${val}°C`,
+          style: { colors: textColor },
+        },
+      },
+      grid: {
+        borderColor: gridColor,
+        strokeDashArray: 4,
+        padding: { left: 10, right: 10 },
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        labels: { colors: textColor },
+        markers: { radius: 12 },
+      },
+      tooltip: {
+        theme: isDark ? "dark" : "light",
+        y: { formatter: (val) => `${val}°C` },
       },
     };
 
     const chart = new ApexCharts(chartRef.current, options);
     chart.render();
-
-    return () => {
-      chart.destroy();
-    };
+    return () => chart.destroy();
   }, [apiData]);
 
+  // 目前天氣資訊
+  const currentWeather = (() => {
+    if (!apiData?.weatherElement) return null;
+    const minT = apiData.weatherElement.find((e) => e.elementName === "MinT");
+    const maxT = apiData.weatherElement.find((e) => e.elementName === "MaxT");
+    const wx = apiData.weatherElement.find((e) => e.elementName === "Wx");
+    if (!minT || !maxT) return null;
+    return {
+      minTemp: minT.time[0]?.parameter.parameterName,
+      maxTemp: maxT.time[0]?.parameter.parameterName,
+      description: wx?.time[0]?.parameter.parameterName,
+    };
+  })();
+
   return (
-    <div className="container sm:py-16 py-12 w-full flex flex-col ">
-      <div className=" w-full  relative bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
-        {!apiData && (
-          <>
-            <div className="absolute w-full inset-0 h-full flex items-center justify-center gap-x-4">
-              <LoadingSpinner />{" "}
-              <p className="text-sm text-gray-900 dark:text-white pt-0  md:pt-4 z-10">
-                {t("loadingWeatherAPI")}
-              </p>
+    <div className="container sm:py-16 py-12 w-full">
+      <div className="relative w-full rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 md:p-8 shadow-sm">
+        
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div className="flex items-center gap-4">
+            {currentWeather && <WeatherIcon description={currentWeather.description} size="text-5xl" />}
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 dark:text-white">{t("weathertitle")}</h2>
+              {selectedOption && (
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">{selectedOption}</p>
+              )}
             </div>
-          </>
-        )}
-        <div className="flex flex-col-reverse  sm:justify-between sm:flex-row">
-          <p className="text-base text-gray-900 dark:text-white pt-2  md:pt-2 ">
-            {t("weathertitle")} {selectedOption && "- " + selectedOption}
-          </p>
-          <DropdownButton
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            contryData={contryData}
-          />
+          </div>
+          <CitySelector selected={selectedOption} setSelected={setSelectedOption} data={contryData} />
         </div>
 
-        <div id="line-chart" ref={chartRef}></div>
-        <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between mt-2.5"></div>
+        {/* 目前溫度摘要 */}
+        {currentWeather && (
+          <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-gray-100 dark:border-gray-700">
+            <span className="text-5xl font-light text-gray-800 dark:text-white">
+              {currentWeather.maxTemp}°
+            </span>
+            <span className="text-2xl text-gray-400">
+              / {currentWeather.minTemp}°
+            </span>
+            <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">
+              {currentWeather.description}
+            </span>
+          </div>
+        )}
+
+        {/* Content */}
+        {!apiData ? (
+          <Loading />
+        ) : (
+          <div ref={chartRef} />
+        )}
+
+        {/* Footer */}
+        <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+          <p className="text-xs text-gray-400 text-right">
+            資料來源：中央氣象署
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
 export default Weather;
-
-const DropdownButton = ({ selectedOption, setSelectedOption, contryData }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false);
-  };
-
-  return (
-    <div className="relative inline-block text-left">
-      <button
-        onClick={toggleDropdown}
-        className="h-10 text-black bg-transparent hover:bg-gray-200 border font-medium rounded-md text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-gray-600 dark:hover:bg-blue-700 dark:text-white"
-        type="button"
-      >
-        {selectedOption || "選擇縣市"}
-      </button>
-      {isOpen && (
-        <div className="z-10 absolute h-52 mt-1 w-36  overflow-y-scroll bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700">
-          <ul
-            className="py-2 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownDefaultButton"
-          >
-            {contryData.map((item, index) => (
-              <li key={index}>
-                <div
-                  onClick={() => handleOptionClick(item.value)}
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  {item.value}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-};
