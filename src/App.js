@@ -8,6 +8,7 @@ import Timeline from "./components/Timeline";
 import Protfolio from "./components/Protfolio";
 import Footer from "./components/Footer";
 import Weather from "./components/Weather";
+import Biography from "./components/Biography";
 
 function App() {
   useEffect(() => {
@@ -19,6 +20,7 @@ function App() {
       <Header />
       <About />
       <Timeline />
+      <Biography />
       {/* <Protfolio /> */}
       <Weather />
       <Footer />

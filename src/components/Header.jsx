@@ -174,6 +174,15 @@ const Header = () => {
                   {t("headerTimeline")}
                 </a>
               </li>
+              <li>
+                <a
+                  onClick={handleClick}
+                  href="#biography"
+                  className="block p-1 text-gray-900 rounded hover:bg-gray-100 sm:hover:bg-transparent sm:border-0 sm:hover:text-blue-700 sm:p-0 dark:text-white sm:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white sm:dark:hover:bg-transparent"
+                >
+                  {t("headerBiography")}
+                </a>
+              </li>
               {/* <li>
                 <a
                   onClick={handleClick}
