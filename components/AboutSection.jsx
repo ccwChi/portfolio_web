@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import JeffProfileImg from "@/assets/images/Jeff.webp";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -62,11 +63,12 @@ const AboutSection = () => {
                                 <div className="relative rounded-2xl overflow-hidden border border-border shadow-lg bg-muted transition-all duration-500">
                                     <AspectRatio ratio={3 / 4}>
                                         <Image
-                                            src="/Jeff.webp"
+                                            src={JeffProfileImg}
                                             alt="Jeff Profile"
                                             fill
                                             className="object-cover"
                                             priority
+                                            placeholder="blur"
                                         />
                                     </AspectRatio>
                                 </div>
