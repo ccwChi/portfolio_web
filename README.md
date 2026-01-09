@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 個人作品集網站
 
-## Getting Started
+使用 Next.js 建構的個人作品集網站，展示我從材料科學轉職至全端工程師的職涯歷程。
 
-First, run the development server:
+## 技術堆疊
+
+*   **框架**: Next.js 14 (App Router)
+*   **語言**: JavaScript / React
+*   **樣式**: Tailwind CSS v4, Shadcn UI
+*   **動畫**: Framer Motion
+*   **國際化**: react-i18next (已實作 繁體中文 / 英文 切換)
+*   **主題模式**: next-themes (支援 亮色 / 深色 模式切換)
+*   **部署平台**: GitHub Pages
+
+## 功能特色
+
+*   **響應式設計**: 針對手機與桌機版面進行優化，提供流暢的瀏覽體驗。
+*   **雙語支援**: 可即時切換 中文 / 英文 語系。
+*   **深色模式**: 支援系統自動偵測，並提供手動切換開關。
+*   **互動體驗**: 使用 Framer Motion 實現流暢的進場動畫與過場效果。
+*   **現代化元件**: 採用 Shadcn UI 確保介面的一致性與可訪問性。
+
+## 本地開發
+
+1.  **安裝套件**:
+    ```bash
+    npm install
+    ```
+
+2.  **啟動開發伺服器**:
+    ```bash
+    npm run dev
+    ```
+
+3.  **建置正式版本**:
+    ```bash
+    npm run build
+    ```
+
+## 部署方式
+
+本專案已配置為透過 **GitHub Pages** 進行部署。
+
+執行以下指令即可進行部署：
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run deploy
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+此指令將會自動執行：
+1.  建置專案 (`npm run build`)。
+2.  將靜態檔案匯出至 `out` 目錄。
+3.  將 `out` 目錄內容推送到 `gh-pages` 分支。
